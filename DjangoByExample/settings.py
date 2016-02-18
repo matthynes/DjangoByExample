@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'DBE_blog',
+    'blog',
+
+    'taggit',
 ]
 
 MIDDLEWARE_CLASSES = [

@@ -3,11 +3,13 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
 
+from taggit.managers import TaggableManager
+
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super(PublishedManager, self).get_queryset().filter(
-                status='published')
+            status='published')
 
 
 class Post(models.Model):
@@ -26,6 +28,7 @@ class Post(models.Model):
 
     objects = models.Manager()
     published = PublishedManager()
+    tags = TaggableManager()
 
     class Meta:
         ordering = ('-publish',)
@@ -37,3 +40,19 @@ class Post(models.Model):
         return reverse('blog:post_detail',
                        args=[self.publish.year, self.publish.strftime('%m'),
                              self.publish.strftime('%d'), self.slug])
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments')
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return 'Comment posted by {} on {}'.format(self.name, self.post)
