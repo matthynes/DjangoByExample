@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import RedirectView
 
+from blog.feeds import LatestPostsFeed
 from blog.sitemaps import PostSitemap
 
 sitemaps = {
